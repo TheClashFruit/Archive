@@ -1,0 +1,177 @@
+#-------------------------------------------------------------------------------#
+
+# A Készítés Alatt Lévő Dolgok NINCSENEK Fordítva!
+# A Frdítás NEM 100%-os!
+
+options:
+	#Ne Szerkezd!
+	version: 0.0.1
+	grupver: KA
+	#Ezt Már Lehet
+	brodcastprefix: &8[&c&lLobby &a&lBroadcast&8]
+	prefix: &8[&c&lLobby&8]
+	joinmsg: &a%player% &3Csatlakozott A(z) {@servername}
+	servername: Szerver-Hez
+	#Üdvözlő Üzenet
+	wmsgline1: &7&m-----------------&8[&a&lÜdv&8]&7&m------------------
+	wmsgline2: &cWelcome &a%player% &cOn This {@servername}
+	wmsgline3: &cTo List Command Type &a/help &cTo The Chat
+	wmsgline4: &7&m-----------------------------------------------
+	#Coming Soon At Options
+	#Grup System
+	#defaultprefix: [&8Default&r]
+	#adminprefix: [&cAdmin&r]
+
+
+#-------------------------------------------------------------------------------#
+
+#===========================
+#> Készitette: Clash Fruit
+#
+#> Discord: >> - GáBor - <<#4159
+#
+#> Verzió: 0.0.1
+#
+#> Szín Kódok: http://bit.ly/shorturl458
+#===========================
+
+#Join
+on join:
+	broadcast ""
+	broadcast "{@joinmsg}"
+	broadcast ""
+	message "{@wmsgline1}"
+	message "{@wmsgline2}"
+	message "{@wmsgline3}"
+	message "{@wmsgline4}"
+	if {spawn} is not set:
+		message "{@prefix} &cA Spawn Nem Található!"
+		stop trigger
+	teleport the player to {spawn}
+	
+#Main Command
+command /lobby [<text>]:
+	permission: lobby.main
+	trigger:
+		if arg 1 is "help":
+			message "&7&m-----------------&8[&c&lLobby Help&8]&7&m------------------"
+			message "&c/setspawn &f- &7A Spawn Beálítása"
+			message "&c/setwarp <warp> &f- &7Warp Elhelyezése"
+			message "&c/delwarp <warp> &f- &7Warp Törlése"
+			message "&c/warp <warp> &f- &7Teeportálás A Warphoz"
+			message "&c/spawn &f- &7Spawn Meglátogatása"
+			message "&7&m-----------------------------------------------"
+			message "&c/lobby reload &f- &7Skript Fájl Újratöltése!"
+			message "&c/lobby about &f- &7A Pluginrol!"
+			message "&7&m-----------------------------------------------"
+		if arg 1 is "reload":
+			message "{@prefix} &cÚjratöltés..."
+			make console execute command "/skript reload hu_esl-skript.sk"
+			wait 1 seconds
+			message "{@prefix} &aReloaded!"
+		if arg 1 is "about":
+			message "&7&m|===========&8[&c&lPluginrol&8]&7&m==========="
+			message "&7&m|> Készitette: Clash Fruit"
+			message "|"
+			message "&7&m|> Verzió: {@version}"
+			message "&7&m|================================"
+		if arg 1 is not set:
+			message "{@prefix} &cKérlek Írd Be: &a/lobby help"
+
+#Spawn Commands
+command /setspawn:
+	permission: lobby.set.spawn
+	trigger:
+		set {spawn} to player's location
+		message "{@prefix} &aA Spawn Helye Sikeresen Beálítva!"
+command /spawn:
+	trigger:
+		if {spawn} is not set:
+			message "{@prefix} &cA Spawn Nem Található!"
+			stop trigger
+		teleport the player to {spawn}
+		message "{@prefix} &aTeleporálás..."
+
+#Warp Commands
+command /warp <text>:
+	trigger:
+		if {warp.%argument 1%} is not set:
+			message "{@prefix} &cA Warp Nem Található!"
+			stop trigger
+		teleport the player to {warp.%argument 1%}
+		message "{@prefix} &aTeleportálás A(z) &c%argument 1% &aHelyre!"
+command /setwarp <text>:
+	permission: lobby.set.warp
+	trigger:
+		set {warp.%argument 1%} to player's location
+		message "{@prefix} &aThe &c%argument 1% &aHely Sikeresen Létrehozva!"
+command /delwarp <text>:
+	permission: lobby.del.warp
+	trigger:
+		if {warp.%argument 1%} is not set:
+			message "{@prefix} &cA Warp Nem Található!"
+			stop trigger
+		delete {warp.%argument 1%}
+		message "{@prefix} &aA(z) &c%argument 1% &aHely Sikeresen Törölve!"
+		
+#Other Commands
+command /broadcast <text>:
+	permission: lobby.server.msg
+	trigger:
+		broadcast "{@brodcastprefix}&a %argument 1%"
+		
+#Chat System + Grup System
+#	Work In Progress...
+on chat:
+	if {grup.%player%} is not set:
+		cancel event
+		broadcast "{@playerprefix} &f%player% &8>> {@chatcolor}%message%"
+	else:
+		if {grup.%player%} is "admin":
+			set {msg.%player%} to "%message%"
+			cancel event
+			broadcast "{@adminprefix} &a%player% &8>> &f{msg.%player%}"
+
+command /eslgrups [<text>]:
+	permission: lobby.grups.main
+	trigger:
+		if arg 1 is "help":
+			message "&7&m-----------------&8[&c&lGrups Help&8]&7&m------------------"
+			message "&c/setgrup <player> <grup> &f- &7Set Player's Grup"
+			message "&c/grups &f- &7View Grups"
+			message "&7&m-----------------------------------------------"
+			message "&c/eslgrups about &f- &7About Grup System!"
+			message "&7&m-----------------------------------------------"
+		if arg 1 is "about":
+			message "&7&m|===========&8[&c&lGrups&8]&7&m==========="
+			message "&7&m|> Made by Clash Fruit"
+			message "|"
+			message "&7&m|> Version: {@grupver}"
+			message "&7&m|============================="
+
+#-------------------------------------------------------------------------------#
+
+#===========================
+#> Addons Help: http://bit.ly/shorturl459
+#
+#> Addons: http://bit.ly/shorturl460
+#===========================
+
+#Addons
+
+#>---------Default Addon
+#> Author: Clash Fruit
+#> About Author: §LINK§
+#> Addon Version: 0.0.0
+
+command /esladdons:
+	permission: esl.addons
+	trigger:
+		message "&7&m|===========&8[&c&lAddons&8]&7&m==========="
+		message "&7&m|> Addons Help: &9&nhttp://bit.ly/shorturl459"
+		message "|"
+		message "&7&m|> Addons: &9&nhttp://bit.ly/shorturl460"
+		message "&7&m|=============================="
+#>-------------------End
+
+#-------------------------------------------------------------------------------#

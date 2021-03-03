@@ -1,0 +1,53 @@
+#-------------------------------------------------------------------------------#
+
+options:
+	prefix: &aWarp &7& &aSpawn &7>>
+
+
+#-------------------------------------------------------------------------------#
+
+#===========================
+#> Késztette Clash Fruit
+#
+#> Discord: >> - GáBor - <<#4159
+#
+#> Color Codes: http://bit.ly/shorturl458
+#===========================
+
+
+#Spawn Commands
+command /setspawn:
+	permission: set.spawn
+	trigger:
+		set {spawn} to player's location
+		message "{@prefix} &aSpawn Location Successfully Set!"
+command /spawn:
+	trigger:
+		if {spawn} is not set:
+			message "{@prefix} &cSpawn Location Not Found!"
+			stop trigger
+		teleport the player to {spawn}
+		message "{@prefix} &aSpawn!"
+
+#Warp Commands
+command /warp <text>:
+	trigger:
+		if {%argument 1%} is not set:
+			message "{@prefix} &cWarp Not Found!"
+			stop trigger
+		teleport the player to {%argument 1%}
+		message "{@prefix} &aTeleporting The &c%argument 1% &aLocation!"
+command /setwarp <text>:
+	permission: set.warp
+	trigger:
+		set {%argument 1%} to player's location
+		message "{@prefix} &aThe &c%argument 1% &aLocation Successfully Created"
+command /delwarp <text>:
+	permission: del.warp
+	trigger:
+		if {%argument 1%} is not set:
+			message "{@prefix} &cWarp Not Found!"
+			stop trigger
+		delete {%argument 1%}
+		message "{@prefix} &aThe &c%argument 1% &aLocation Successfully Deleted"
+#-------------------------------------------------------------------------------#
